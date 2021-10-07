@@ -1,0 +1,15 @@
+name: swin
+channels:
+  - defaults
+dependencies:
+  - python==3.9
+  - pytorch==1.9.1
+  - torchvision
+  - cudatoolkit==11.1
+  - mypy
+  - flake8
+  - numpy
+  - fastprogress
+  - hydra-core
+  - wandb
+prefix: /home/brad/miniconda3/envs/swin
