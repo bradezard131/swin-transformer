@@ -14,9 +14,12 @@ import swin
 def main(
     cfg: DictConfig,
 ):
+    assert torch.cuda.is_available() or 'cuda' not in cfg.device, "Cannot select CUDA when no CUDA devices are available"
+    print(f'Training using device {cfg.device}')
     device = torch.device(cfg.device)
     
     if cfg.dataset.name.lower() == 'cifar10':
+        print(f'Training on CIFAR10')
         train_dataset = D.CIFAR10(
             cfg.dataset.root,
             train=True,
@@ -25,7 +28,8 @@ def main(
                 T.AutoAugment(T.AutoAugmentPolicy.CIFAR10),
                 T.ToTensor(),
                 T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
+            ]),
+            download=True
         )
         
         val_dataset = D.CIFAR10(
@@ -35,7 +39,8 @@ def main(
                 T.Resize(128),
                 T.ToTensor(),
                 T.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
+            ]),
+            download=True
         )
     else:
         raise NotImplemented
@@ -45,22 +50,26 @@ def main(
         batch_size=cfg.dataloader.batch_size,
         shuffle=True,
         pin_memory=True,
-        num_workers=cfg.dataloader.num_workers
+        num_workers=cfg.dataloader.num_workers,
     )
     
     val_dl = DataLoader(
         val_dataset,
         batch_size=cfg.dataloader.batch_size,
         pin_memory=True,
-        num_workers=cfg.dataloader.num_workers
+        num_workers=cfg.dataloader.num_workers,
     )
     
+    print(f'Building Swin model')
     model = swin.build_swin_model(cfg.dataset.num_classes, **cfg.model).to(device)
     
     if cfg.optim.name.lower() == 'sgd':
+        print(f'Building SGD optimizer')
         optim = torch.optim.SGD(
             model.parameters(),
-            **cfg.optim
+            lr = cfg.optim.lr,
+            momentum = cfg.optim.momentum,
+            weight_decay = cfg.optim.weight_decay,
         )
     else:
         raise NotImplemented

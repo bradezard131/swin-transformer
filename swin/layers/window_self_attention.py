@@ -113,7 +113,7 @@ class ShiftedWindowedMultiheadSelfAttention(WindowedMultiheadSelfAttention):
                              dtype=inputs.dtype, device=inputs.device)
         padded[..., 
                self.shift_offset:self.shift_offset+original_height, 
-               self.shift_offset:self.shift_offset+new_width] = inputs
+               self.shift_offset:self.shift_offset+original_width] = inputs
         
         # Do the forward pass
         outputs = super(ShiftedWindowedMultiheadSelfAttention, self).forward(padded)
@@ -121,4 +121,4 @@ class ShiftedWindowedMultiheadSelfAttention(WindowedMultiheadSelfAttention):
         # Unpad the result
         return outputs[..., 
                self.shift_offset:self.shift_offset+original_height, 
-               self.shift_offset:self.shift_offset+new_width]
+               self.shift_offset:self.shift_offset+original_width]
