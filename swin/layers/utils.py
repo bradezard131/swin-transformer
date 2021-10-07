@@ -1,4 +1,5 @@
 import torch
+from torch import nn
 
 
 def pad_if_necessary(
@@ -12,3 +13,16 @@ def pad_if_necessary(
         padded[..., :inputs.size(-2), :inputs.size(-1)] = inputs
         inputs = padded
     return inputs
+
+
+class ShuffleLayerNorm2D(nn.LayerNorm):
+    """
+    Shuffles channels to perform layernorm over dimension 1 rather than -1
+    """
+    def forward(
+        self,
+        inputs: torch.Tensor,
+    ) -> torch.Tensor:
+        inputs = inputs.permute(0, 2, 3, 1)
+        result = super(ShuffleLayerNorm2D, self).forward(inputs)
+        return result.permute(0, 3, 1, 2)
