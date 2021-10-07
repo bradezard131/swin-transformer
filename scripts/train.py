@@ -74,7 +74,10 @@ def main(
     else:
         raise NotImplemented
     
-    wandb.init(config=cfg)  # type: ignore
+    wandb.init(
+        project=cfg.wandb.project,
+        config=cfg
+    )  # type: ignore
     wandb.watch(model, log_freq=100)
     
     epoch_bar = master_bar(range(cfg.epochs))

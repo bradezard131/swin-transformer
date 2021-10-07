@@ -1,6 +1,7 @@
 device: "cuda:0"
 epochs: 10
 log_interval: 100
+random_seed: 42
 
 dataloader:
   batch_size: 64
@@ -26,3 +27,6 @@ optim:
   lr: 1e-3
   momentum: 0.9
   weight_decay: 1e-4
+
+wandb:
+  project: "Swin CIFAR10"
