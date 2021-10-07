@@ -17,7 +17,7 @@ class PatchMerge(nn.Module):
             out_channels = window_size * channels,
             kernel_size = window_size,
             stride = window_size,
-            padding = window_size // 2
+            padding = (window_size - 1) // 2
         )
     
     def forward(

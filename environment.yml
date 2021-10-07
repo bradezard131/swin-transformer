@@ -12,4 +12,5 @@ dependencies:
   - fastprogress
   - hydra-core
   - wandb
+  - pytest
 prefix: /home/brad/miniconda3/envs/swin
