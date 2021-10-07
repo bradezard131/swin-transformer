@@ -1,0 +1,28 @@
+device: "cuda:0"
+epochs: 10
+log_interval: 100
+
+dataloader:
+  batch_size: 64
+  num_workers: 8
+
+dataset:
+  name: "cifar10"
+  root: "./data"
+  num_classes: 10
+
+model:
+  layer_configuration: [2, 2, 6 ,2]
+  initial_channels: 96
+  patch_size: 4
+  heads: 3
+  window_size: 4
+  offset_size: 2
+  expansion: 4
+  dropout: 0.1
+
+optim:
+  name: 'sgd'
+  lr: 1e-3
+  momentum: 0.9
+  weight_decay: 1e-4
